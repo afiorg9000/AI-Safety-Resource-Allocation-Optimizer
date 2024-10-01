@@ -87,6 +87,6 @@ To run the linear programming model:
 python allocation_model.py
 ```
 
-#Future Work
+## Future Work
 - Remove duplicate slugs
 - Create a script to turn the output into a csv file
