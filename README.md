@@ -1,4 +1,4 @@
-# AI Safety Resource Allocation
+# AI Safety Resource Allocation Optimization Algorithm
 
 This repository contains the code and data for optimizing resource allocation across AI governance and policy advocacy projects. The goal is to distribute a fixed budget to maximize the impact of AI safety efforts while accounting for factors such as impact potential, uncertainty, scalability, and neglectedness.
 
@@ -65,45 +65,6 @@ The dataset used in this model is stored in `aisf_projects.csv`, which includes:
 - Funding raised and goal
 - Impact and uncertainty scores (generated using an LLM and project metadata)
 
-## Model Details
-
-### Linear Programming Model
-The model is built using Python and PuLP and leverages linear programming to maximize the total impact score across projects. The decision variable is the fraction of each project’s funding goal to allocate (ranging from 0 to 1). The objective function maximizes the total impact score, subject to the budget constraint and other factors like risk tolerance and scalability.
-
-Key constraints include:
-- Budget limit
-- Risk-adjusted uncertainty
-- Project scalability and neglectedness
-
-```python
-from pulp import LpMaximize, LpProblem, lpSum, LpVariable
-
-# Define decision variables
-allocation_vars = [LpVariable(f'alloc_{i}', lowBound=0, upBound=1) for i in range(len(projects))]
-
-# Objective function: maximize total impact
-model += lpSum([allocation_vars[i] * projects[i]['impact'] for i in range(len(projects))])
-
-# Constraint: Total allocated funding should not exceed budget
-model += lpSum([allocation_vars[i] * projects[i]['goal'] for i in range(len(projects))]) <= total_budget
-
-# Solve the model
-model.solve()
-
-```
-## Results
-
-The model selected a diverse set of projects for funding, balancing high-impact, high-uncertainty projects with smaller, more tractable ones. Key results include:
-
-- **Total Allocated Budget**: $700,000
-- **Opportunity Cost**: $167,243.89
-- **Top Funded Projects**: 
-  - AI vs AI: Deepfake and GenAI Defense System
-  - Diversify Funding for AI Safety
-  - AI-Driven Market Alternatives for a Post-AGI World
-
-The allocation prioritizes impactful projects with some level of uncertainty, reflecting a strategic approach to balancing risk and reward.
-
 ## Usage
 
 ### Prerequisites
@@ -118,10 +79,14 @@ pip install pulp pandas
 # Running the Model
 
 To run the linear programming model:
-
-1. Ensure the dataset `aisf_projects.csv` is in the working directory.
-2. Run the `allocation_model.py` script:
+1. Create and export [openai API key](https://platform.openai.com/docs/quickstart/create-and-export-an-api-key)
+2. Run `python3 scrape_html.py` script.
+3. Ensure the dataset `aisf_projects.csv` is in the working directory.
 
 ```bash
 python allocation_model.py
 ```
+
+#Future Work
+- Remove duplicate slugs
+- Create a script to turn the output into a csv file
